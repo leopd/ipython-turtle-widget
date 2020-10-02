@@ -64,7 +64,7 @@ class Turtle(widgets.DOMWidget):
         self._pen_on = True
         self._turtle_location_x = 0
         self._turtle_location_y = 0
-        self._turtle_heading = 90.0
+        self._turtle_heading = 0.0
         self._turtle_heading_x = 1.0
         self._turtle_heading_y = 0.0
 
@@ -108,17 +108,20 @@ class Turtle(widgets.DOMWidget):
     def setposition(self, x, y=None):
         return self.goto(x, y)
 
-    def left(self, degree=None):
-        if degree is None:
-            degree = 90
-        self._turtle_heading += degree
-        self._turtle_heading = self._turtle_heading % 360
+    def setheading(self, degree):
+        self._turtle_heading = degree % 360
 
         hx = math.cos(math.radians(self._turtle_heading))
         hy = math.sin(math.radians(self._turtle_heading))
 
         self._turtle_heading_x = hx
         self._turtle_heading_y = hy
+
+    def left(self, degree=None):
+        if degree is None:
+            degree = 90
+        self._turtle_heading += degree
+        self.setheading(self._turtle_heading)
 
     def right(self, degree=None):
         if degree is None:
@@ -145,6 +148,7 @@ class Turtle(widgets.DOMWidget):
 
     def reset(self):
         self._reset()
+        self.setheading(0)
         self.pencolor(0, 0, 0)
         self.forward(0)
         self._line = 'clear'
